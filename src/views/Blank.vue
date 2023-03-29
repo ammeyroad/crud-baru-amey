@@ -1,5 +1,7 @@
 <script setup>
 import crud from '@/components/crud.vue';
+
+
 </script>
 
 <template>

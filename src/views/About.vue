@@ -1,47 +1,59 @@
 <template>
-  <main>
-    <section class="bg-gray-50 py-8 px-5 rounded">
-      <div>
-        <BackBtn />
-        <p class="text-3xl my-2 font-medium">Hello, I'm {{ about.name }}</p>
-        <small>
-          {{ about.subs.join(' | ') }}
-        </small>
-      </div>
-      <div class="flex gap-2 mt-3">
-        <template v-for="(item, i) in sosmed" :key="i">
-          <a :href="item.href" target="_blank">
-            <i :class="item.icon" class="text-2xl"></i>
-          </a>
-        </template>
-      </div>
-    </section>
-    <chatgpt />
-    <Footer />
-  </main>
+  <div>
+    <form>
+      <label for="query">Search Query:</label>
+      <input type="text" id="query" v-model="query" />
+      <button type="button" @click="search">Search</button>
+    </form>
+    <ul>
+      <li v-for="item in items" :key="item.id">
+      {{ item.CreateDate }} br
+        {{ item.startdate }} {{ item.id }} | {{ item.fields.status }}
+      </li>
+    </ul>
+  </div>
 </template>
-<script setup>
-import Footer from '@/components/Footer.vue';
-import BackBtn from '@/components/BackBtn.vue';
-import chatgpt from '@/components/chatgpt.vue';
 
-const about = {
-  name: 'Abdillah',
-  subs: ['Fullstack Web Developer', 'Javascript Enthusiast'],
+<script>
+import moment from 'moment';
+import 'moment/locale/id';
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      query: '',
+      items: [],
+    };
+  },
+  methods: {
+    search() {
+      axios
+        .get(
+          `https://api.airtable.com/v0/appTjJ62VlXlQygqr/memo?${this.query}`,
+          {
+            headers: {
+              Authorization: 'Bearer keyR8rYGOyxgPY76u',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        .then((response) => 
+        {
+          const data = response.data.records;
+          this.items = data.map((item) => {
+            const startdate = moment(item.createdTime).locale('id');
+            const formattedDate = startdate.format('DD-MM-YYYY hh:mm');
+            item.startdate = formattedDate;
+            return item;
+          }
+          );
+        }
+        )
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
 };
-
-const sosmed = [
-  {
-    icon: 'fab fa-github text-gray-800',
-    href: 'https://github.com/or-abdillh',
-  },
-  {
-    icon: 'fab fa-instagram text-pink-600',
-    href: 'https://instagram.com/or.abdillh',
-  },
-  {
-    icon: 'fab fa-facebook text-blue-700',
-    href: 'https://facebook.com/abdillahcfc',
-  },
-];
 </script>

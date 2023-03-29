@@ -139,15 +139,15 @@
         :key="record.id"
         class="flex space-y-4 items-center"
       >
-        <p>{{ record.fields.name }}</p>
-        <p>{{ record.id }}</p>
-        <p>{{ record.fields.ruang }}</p>
+        {{ record.formattedDate }} --
+
         <p>{{ record.fields.agenda }}</p>
         <p>{{ record.fields.dept }}</p>
         <p>{{ record.fields.tanggal }}</p>
         |
         <p>{{ record.fields.jam }}</p>
         |
+        <p>{{ record.createdTime }}</p>
         <p>{{ record.fields.selesai }}</p>
         |
 
@@ -164,6 +164,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import api from './api.js';
 
 export default {
@@ -189,6 +190,18 @@ export default {
     } catch (error) {
       console.error(error);
     }
+  },
+  computed: {
+    formattedrecords() {
+      return this.records.map((record) => {
+        const d = moment(record.createdTime);
+        const formattedDate = d.format('YYYY-MM-DD HH:mm');
+        return {
+          id: record.id,
+          formattedDate: formattedDate,
+        };
+      });
+    },
   },
   methods: {
     async createRecord() {
