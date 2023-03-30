@@ -197,7 +197,6 @@ export default {
         const d = moment(record.createdTime);
         const formattedDate = d.format('YYYY-MM-DD HH:mm');
         return {
-          id: record.id,
           formattedDate: formattedDate,
         };
       });
