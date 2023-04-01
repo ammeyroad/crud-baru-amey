@@ -1,6 +1,72 @@
 <template>
   <div class="px-4">
-    <jadwalform />
+    <form v-if="mode === 'create'" @submit.prevent="createRecord">
+      <label for="ruang">Ruang:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="ruang"
+        name="ruang"
+      /><br /><br />
+
+      <label for="name">Nama:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="name"
+        name="name"
+      /><br /><br />
+
+      <label for="email">Email:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="email"
+        v-model="email"
+        name="email"
+      /><br /><br />
+
+      <label for="agenda">Agenda:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="agenda"
+        name="agenda"
+      /><br /><br />
+
+      <label for="dept">Departemen:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="dept"
+        name="dept"
+      /><br /><br />
+
+      <label for="tanggal">Tanggal:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="date"
+        v-model="tanggal"
+        name="tanggal"
+      /><br /><br />
+
+      <label for="jam">Jam:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="jam"
+        name="jam"
+      /><br /><br />
+
+      <label for="selesai">Selesai:</label><br />
+      <input
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        v-model="selesai"
+        name="selesai"
+      /><br /><br />
+
+      <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+    </form>
     <form v-if="mode === 'edit'" @submit.prevent="updateRecord">
       <label for="ruang">Ruang:</label><br />
       <input
@@ -88,9 +154,6 @@
         <button @click="editRecord(record)" class="btn btn-sm btn-primary">
           Edit
         </button>
-        <button @click="deleteRecord(record)" class="btn btn-sm btn-primary">
-          Hapus
-        </button>
       </li>
     </ul>
     <button @click="mode = 'create'">Tambah Data</button>
@@ -99,8 +162,7 @@
 
 <script>
 import moment from 'moment';
-import jadwalform from '@/components/jadwalform.vue';
-import api from '@/stores/api.js';
+import api from './api.js';
 
 export default {
   data() {
@@ -208,15 +270,6 @@ export default {
         this.selesai = '';
         this.recordId = '';
         this.mode = 'create';
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async deleteRecord(record) {
-      try {
-        await api.delete(`/tblB7xBeCO3xzW9SQ/${record.id}`);
-        const index = this.records.findIndex((r) => r.id === record.id);
-        this.records.splice(index, 1);
       } catch (error) {
         console.error(error);
       }

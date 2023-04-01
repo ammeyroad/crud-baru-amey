@@ -154,9 +154,6 @@
         <button @click="editRecord(record)" class="btn btn-sm btn-primary">
           Edit
         </button>
-        <button @click="deleteRecord(record)" class="btn btn-sm btn-primary">
-          Hapus
-        </button>
       </li>
     </ul>
     <button @click="mode = 'create'">Tambah Data</button>
@@ -273,15 +270,6 @@ export default {
         this.selesai = '';
         this.recordId = '';
         this.mode = 'create';
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async deleteRecord(record) {
-      try {
-        await api.delete(`/tblB7xBeCO3xzW9SQ/${record.id}`);
-        const index = this.records.findIndex((r) => r.id === record.id);
-        this.records.splice(index, 1);
       } catch (error) {
         console.error(error);
       }
